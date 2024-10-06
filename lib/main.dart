@@ -26,32 +26,32 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends ConsumerWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final hoge = ref.watch(hogeFutureProvider);
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            hoge.when(
-              data: (data) {
-                return Text(data.name);
-              },
-              loading: () {
-                return const Text('load中');
-              },
-              error: (error, stackTrace) {
-                return const Text('error');
+            Consumer(
+              builder: (context, ref, _) {
+                final hoge = ref.watch(hogeFutureProvider);
+                return hoge.when(
+                  data: (data) {
+                    return Text(data.name);
+                  },
+                  loading: () {
+                    return const Text('load中');
+                  },
+                  error: (error, stackTrace) {
+                    return const Text('error');
+                  },
+                );
               },
             ),
             ElevatedButton(
